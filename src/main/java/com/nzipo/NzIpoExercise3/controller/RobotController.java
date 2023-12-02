@@ -5,6 +5,8 @@ import com.nzipo.NzIpoExercise3.entities.CaseValue;
 import com.nzipo.NzIpoExercise3.service.NzService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +20,15 @@ public class RobotController {
     private final NzService nzService;
 
     @RequestMapping("/complaintRobot")
-    public CaseValue scrap() throws IOException, InterruptedException {
-        return nzService.scrapping();
+    public ResponseEntity<?> scrap() throws IOException, InterruptedException {
+        try {
+
+            CaseValue result = nzService.scrapping();
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.CREATED);
+        }
+
     }
 }
